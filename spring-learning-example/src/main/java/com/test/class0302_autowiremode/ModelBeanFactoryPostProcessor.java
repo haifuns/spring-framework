@@ -16,5 +16,7 @@ public class ModelBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         AbstractBeanDefinition beanDefinition = (AbstractBeanDefinition) beanFactory.getBeanDefinition("autowireModeA");
         beanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+
+        // 默认autowire model是AUTOWIRE_NO，也就是不自动注入，但是Aware等和注解驱动的注入还是会被正常应用
     }
 }
