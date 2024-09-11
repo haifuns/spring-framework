@@ -1,4 +1,4 @@
-package com.test.class0302_dependson;
+package com.test.class0310_dependson;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

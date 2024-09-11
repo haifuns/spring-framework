@@ -1,4 +1,4 @@
-package com.test.class0302_dependson;
+package com.test.class0310_dependson;
 
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
