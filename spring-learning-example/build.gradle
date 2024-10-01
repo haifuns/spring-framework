@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+configurations.configureEach {
+    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+}
+
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.13.1'
     // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class AutowireTest {
 
     /**
-     * {@link org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor}
+	 * {@link org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor#postProcessProperties}
      * {@link org.springframework.beans.factory.support.DefaultListableBeanFactory#resolveDependency}
      */
     @Test
