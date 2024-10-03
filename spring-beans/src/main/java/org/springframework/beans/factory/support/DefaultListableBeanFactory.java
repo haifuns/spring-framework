@@ -1349,8 +1349,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			TypeConverter converter = (typeConverter != null ? typeConverter : getTypeConverter());
 			Object result = converter.convertIfNecessary(matchingBeans.values(), type);
+			// 待注入bean是List
 			if (result instanceof List) {
 				if (((List<?>) result).size() > 1) {
+					// 排序优先级，PriorityOrdered > Ordered > @Order
 					Comparator<Object> comparator = adaptDependencyComparator(matchingBeans);
 					if (comparator != null) {
 						((List<?>) result).sort(comparator);

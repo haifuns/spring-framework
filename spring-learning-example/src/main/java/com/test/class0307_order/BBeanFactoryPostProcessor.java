@@ -15,9 +15,9 @@ import javax.annotation.PostConstruct;
  * @date 2024-10-02 17:54
  */
 @Component
-@Order(5)
+@Order(7)
 @Slf4j
-public class BBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
+public class BBeanFactoryPostProcessor extends BeanElement implements BeanFactoryPostProcessor, InitializingBean {
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		int orderValue = 0;
@@ -38,6 +38,6 @@ public class BBeanFactoryPostProcessor implements BeanFactoryPostProcessor, Init
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		log.info("BBeanFactoryPostProcessor afterPropertiesSet 方法");
+		log.info("BBeanFactoryPostProcessor InitializingBean#afterPropertiesSet 方法");
 	}
 }
