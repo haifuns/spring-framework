@@ -99,53 +99,18 @@ public class MybatisTest {
 	}
 
 	/**
-	 * 测试把一个第三方的对象给spring
+	 * 注册mapper到spring
 	 * <p>
-	 * 1、注解（@Service....） X
-	 * 2、<bean id="n"></bean> X
-	 * 3、注解（@Bean）
-	 * 4、factoryBean
-	 * 5、spring api
-	 * 6、动态想容器注册beanDefinition X
+	 * <a href="https://mybatis.org/spring/mappers.html">官方文档</a>
+	 * <p>
 	 */
 	@Test
-	public void customObjectMybatis() {
+	public void registerMapper() {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MybatisConfig.class);
 		TService service = context.getBean(TService.class);
 		service.queryList();
+
+		// 1.MapperFactoryBean -> 模拟实现MyFactoryBean，底层使用动态代理
+		// 2.<mybatis:scan> / @MapperScan -> 模拟实现@MyScan，MyImportBeanDefinitionRegistrar
 	}
-
-	@Test
-	public void beanDefinitionBatis() {
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.scan("com.test.class0401_mybatis.bean");
-		context.refresh();
-
-		//Object d = context.getBean(X.class);
-	}
-
-	/**
-	 * 测试ImportBeanDefinitionRegistrar
-	 */
-	@Test
-	public void importBeanDefinitionRegistrarBatis() {
-		AnnotationConfigApplicationContext context =
-				new AnnotationConfigApplicationContext(MybatisConfig.class);
-
-//		TService bean = context.getBean(TService.class);
-//		bean.queryFroList();
-//		AMapper aMapper = (AMapper) context.getBean("amapper");
-//		aMapper.queryFroMap(1);
-//
-//		TMapper tMapper = (TMapper) context.getBean("tmapper");
-//		tMapper.queryFroList();
-//		Object d = context.getBean(X.class);
-	}
-
-
-//	@Test
-//	public void test(){
-//		TMapper mapper = (TMapper) MySqlSession.getMapper(TMapper.class);
-//		mapper.queryFroList();
-//	}
 }
