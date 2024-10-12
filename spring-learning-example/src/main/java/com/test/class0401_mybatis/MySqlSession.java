@@ -27,17 +27,11 @@ public class MySqlSession {
 	 */
 	public static Object getMapper(Class clazz) {
 		ClassLoader classLoader = MySqlSession.class.getClassLoader();
-		Class[] classes = new Class[]{clazz};
-		//返回上面符合要求的对象  首先肯定是一个类
-		Object proxy = Proxy.newProxyInstance(classLoader, classes, new MyTestInvocationHandler());
-		return proxy;
+		return Proxy.newProxyInstance(classLoader, new Class[]{clazz}, new MyTestInvocationHandler());
 	}
 
-	@Slf4j(topic = "e")
+	@Slf4j
 	static class MyTestInvocationHandler implements InvocationHandler {
-
-		//获取当前执行的方法对应的sql语句
-		//执行这些sql语句
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			//处理toString、hashcode等Object方法
@@ -48,9 +42,9 @@ public class MySqlSession {
 			//
 			Select select = method.getAnnotation(Select.class);
 			String sql = select.value()[0];
-			log.debug("假装已经连接数据库了 conn db");
-			log.debug("假装执行查询 execute sql:{}", sql);
-			log.debug("假装根据类型返回了真实对象----");
+			log.debug("模拟连接数据库");
+			log.debug("模拟执行查询，sql: {}", sql);
+			log.debug("模拟返回查询结果");
 			return null;
 		}
 	}

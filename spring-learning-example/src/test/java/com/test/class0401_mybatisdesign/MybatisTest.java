@@ -5,12 +5,18 @@ import com.test.class0401_mybatis.MybatisConfig;
 import com.test.class0401_mybatis.dao.TMapper;
 import com.test.class0401_mybatis.service.TService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -57,49 +63,38 @@ public class MybatisTest {
 				new AnnotationConfigApplicationContext(MybatisConfig.class);
 		TService service = context.getBean(TService.class);
 		List<Map<String, Object>> resultList = service.queryList();
-		log.debug("resultList:{}", resultList);
+		log.debug("resultList: {}", resultList);
 	}
 
 	/**
-	 * 测试单独试用mybatis
+	 * 测试单独使用mybatis
 	 */
 	@Test
-	public void onlyBatis() {
-//		BatisConfig config  = new BatisConfig();
-//
-//		DataSource dataSource = config.dataSource();
-//		TransactionFactory transactionFactory =
-//				new JdbcTransactionFactory();
-//		Environment environment =
-//				new Environment("development", transactionFactory, dataSource);
-//		Configuration configuration = new Configuration(environment);
-//
-//
-//		configuration.addMapper(TMapper.class);
-//
-//
-//		SqlSessionFactory sqlSessionFactory =
-//				new SqlSessionFactoryBuilder().build(configuration);
-//
-//		SqlSession sqlSession = sqlSessionFactory.openSession();
-//
-//		//对象 本来是一个接口
-//		//有可能完成了 TMapper接口的实例化
-//		//动态代理
-//		TMapper mapper = sqlSession.getMapper(TMapper.class);
-//		//queryFroMap?
-//		Map<String, Object> resultMap = mapper.queryFroMap(1);
-//		log.debug("resultMap:{}",resultMap);
+	public void onlyMybatis() {
+		MybatisConfig config = new MybatisConfig();
+		DataSource dataSource = config.dataSource();
+		TransactionFactory transactionFactory = new JdbcTransactionFactory();
+		Environment environment = new Environment("development", transactionFactory, dataSource);
+		Configuration configuration = new Configuration(environment);
+
+		configuration.addMapper(TMapper.class);
+
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		// 底层使用jdk动态代理 MapperProxyFactory#newInstance
+		TMapper mapper = sqlSession.getMapper(TMapper.class);
+		Map<String, Object> resultMap = mapper.queryMap(10001);
+		log.debug("resultMap: {}", resultMap);
 	}
 
 
 	/**
-	 * 测试山寨版的 mybatis
+	 * 模拟 mybatis
 	 */
 	@Test
-	public void customBatis() {
+	public void mockMybatis() {
 		TMapper mapper = (TMapper) MySqlSession.getMapper(TMapper.class);
-		mapper.queryMap(1);
 		mapper.queryList();
 	}
 
@@ -111,25 +106,18 @@ public class MybatisTest {
 	 * 3、注解（@Bean）
 	 * 4、factoryBean
 	 * 5、spring api
-	 * 6、动态想容器注册beandefinition X
+	 * 6、动态想容器注册beanDefinition X
 	 */
 	@Test
-	public void customObjectBatis() {
-		//一定要mybatis产生？
-		//只有他自己知道要干什么事情
-
-
-		AnnotationConfigApplicationContext context =
-				new AnnotationConfigApplicationContext(MybatisConfig.class);
-
+	public void customObjectMybatis() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MybatisConfig.class);
 		TService service = context.getBean(TService.class);
 		service.queryList();
 	}
 
 	@Test
 	public void beanDefinitionBatis() {
-		AnnotationConfigApplicationContext context =
-				new AnnotationConfigApplicationContext();
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.scan("com.test.class0401_mybatis.bean");
 		context.refresh();
 
