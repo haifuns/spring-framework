@@ -26,6 +26,11 @@ public class ContextTest {
 		// -> ParentBeanDefinitionRegistry 扫描bean，注册ChildBeanDefinitionRegistry
 		// -> ZBeanDefinitionRegistry 扫描bean
 		// -> ChildBeanDefinitionRegistry
+		//
+		// -> ManualBeanFactoryPostProcessor
+		// -> PriorityOrderedBeanFactoryPostProcessor
+		// -> NormalBeanFactoryPostProcessor
+		// -> ZBeanFactoryPostProcessor
 	}
 
 	@Test
