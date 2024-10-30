@@ -38,7 +38,9 @@ public class ContextTest {
 		context.scan("com.test.class0501_context");
 		context.addBeanFactoryPostProcessor(new ManualBeanFactoryPostProcessor());
 		context.refresh();
-		
+
+		// AbstractApplicationContext#invokeBeanFactoryPostProcessors 执行所有可靠的BeanFactoryPostProcessor
+
 		// BeanFactoryPostProcessor
 		// BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProcessor
 	}
@@ -52,8 +54,10 @@ public class ContextTest {
 		context.register(ContextConfig.class);
 		context.refresh();
 
-		// 执行顺序：
+		// 执行顺序：先执行子类再执行父类，先执行api提供的，再执行内置实现了PriorityOrdered接口的，然后执行扫描出来或者动态beanDefinition添加的实现了Ordered接口的
+
 		// ManualBeanDefinitionRegistry api提供的优先
+		// -> ConfigurationClassPostProcessor 内置，实现了PriorityOrdered接口
 		// -> PriorityOrderBeanDefinitionRegistry 扫描bean，实现PriorityOrdered
 		// -> NormalBeanDefinitionRegistry 扫描bean
 		// -> ParentBeanDefinitionRegistry 扫描bean，注册ChildBeanDefinitionRegistry
