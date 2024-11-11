@@ -56,7 +56,7 @@ public class ContextTest {
 
 		// 执行顺序：先执行子类再执行父类，先执行api提供的，再执行内置实现了PriorityOrdered接口的，然后执行扫描出来或者动态beanDefinition添加的实现了Ordered接口的
 
-		// ManualBeanDefinitionRegistry api提供的优先
+		// ManualBeanDefinitionRegistry api提供的优先，不会重复执行
 		// -> ConfigurationClassPostProcessor 内置，实现了PriorityOrdered接口
 		// -> PriorityOrderBeanDefinitionRegistry 扫描bean，实现PriorityOrdered
 		// -> NormalBeanDefinitionRegistry 扫描bean
@@ -86,5 +86,26 @@ public class ContextTest {
 		//	NormalBeanDefinitionRegistry
 		//	ParentBeanDefinitionRegistry
 		//	ZBeanDefinitionRegistry
+	}
+
+	@Test
+	public void testImportBeanDefinitionRegistrarOrder() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.addBeanFactoryPostProcessor(new ManualBeanDefinitionRegistry());
+		context.addBeanFactoryPostProcessor(new ManualBeanFactoryPostProcessor());
+		context.register(ContextConfig.class);
+		context.refresh();
+
+		// BeanDefinitionRegistryPostProcessor 和 ImportBeanDefinitionRegistrar 的区别：
+		// 1. ImportBeanDefinitionRegistrar 回调时可以获取到注解信息
+		// 2. 执行时机：ImportBeanDefinitionRegistrar 早于 BeanDefinitionRegistryPostProcessor（除api提供）
+		// 3. BeanDefinitionRegistryPostProcessor（除api提供）对一些bean的注册可能有些功能会失效比如 @Bean
+		// 4. ImportBeanDefinitionRegistrar 没有(3)问题，因为他是在 ConfigurationClassPostProcessor 内部执行的
+		// 5. 如果一定要动态注册 BeanDefinition，推荐使用 ImportBeanDefinitionRegistrar
+		// 6. 如果除了动态添加 BeanDefinition 外，还需要对 BeanFactory 做一些全局设定，那么可以用 BeanDefinitionRegistryPostProcessor，因为他是一个bean工厂后置处理器
+
+		// 不推荐使用 BeanFactoryPostProcessor 注册 BeanDefinition 原因：
+		// BeanFactoryPostProcessor 的优先级比 BeanDefinitionRegistryPostProcessor 还要低，
+		// 可能会注册一个不完整功能的 Bean，除非能确定没有那些特殊功能比如 @Bean
 	}
 }
