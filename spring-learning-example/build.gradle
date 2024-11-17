@@ -10,7 +10,7 @@ repositories {
 }
 
 configurations.configureEach {
-    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+    // exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
 }
 
 dependencies {

@@ -35,8 +35,9 @@ public class ContextTest {
 	@Test
 	public void invokeBeanFactoryPostProcessor() {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.scan("com.test.class0501_context");
+		context.addBeanFactoryPostProcessor(new ManualBeanDefinitionRegistry());
 		context.addBeanFactoryPostProcessor(new ManualBeanFactoryPostProcessor());
+		context.register(ContextConfig.class);
 		context.refresh();
 
 		// AbstractApplicationContext#invokeBeanFactoryPostProcessors 执行所有可靠的BeanFactoryPostProcessor

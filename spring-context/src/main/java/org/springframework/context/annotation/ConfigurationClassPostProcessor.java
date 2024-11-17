@@ -223,7 +223,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
-		System.out.println("========== Spring内置 - ConfigurationClassPostProcessor postProcessBeanDefinitionRegistry ==========");
+		logger.info("Spring内置 - ConfigurationClassPostProcessor postProcessBeanDefinitionRegistry");
 		int registryId = System.identityHashCode(registry);
 		if (this.registriesPostProcessed.contains(registryId)) {
 			throw new IllegalStateException(
@@ -244,7 +244,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
-		System.out.println("========== Spring内置 - ConfigurationClassPostProcessor postProcessBeanFactory ==========");
+		logger.info("Spring内置 - ConfigurationClassPostProcessor postProcessBeanFactory");
 		int factoryId = System.identityHashCode(beanFactory);
 		if (this.factoriesPostProcessed.contains(factoryId)) {
 			throw new IllegalStateException(
