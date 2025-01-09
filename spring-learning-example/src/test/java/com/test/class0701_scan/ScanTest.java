@@ -1,6 +1,6 @@
 package com.test.class0701_scan;
 
-import com.test.class0501_context.ContextConfig;
+import com.test.class0701_scan.myscan.ScanBeanDefinitionRegistryPostProcessor;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -15,4 +15,12 @@ public class ScanTest {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ScanConfig.class);
         // 扫描执行时机：ConfigurationClassPostProcessor#postProcessBeanDefinitionRegistry
     }
+
+	@Test
+	public void testMyScan() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		// 自定义扫描
+		context.register(ScanBeanDefinitionRegistryPostProcessor.class);
+		context.refresh();
+	}
 }
