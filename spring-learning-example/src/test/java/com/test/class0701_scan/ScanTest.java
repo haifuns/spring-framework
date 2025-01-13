@@ -1,5 +1,7 @@
 package com.test.class0701_scan;
 
+import com.test.class0401_mybatis.dao.TMapper;
+import com.test.class0701_scan.batis.BatisConfigV2;
 import com.test.class0701_scan.myscan.ScanBeanDefinitionRegistryPostProcessor;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -41,5 +43,17 @@ public class ScanTest {
 		// 6. 如果被include则实例化ScannedGenericBeanDeﬁnition对象
 		// 7. 判断ScannedGenericBeanDeﬁnition是否接口是否抽象、是否加了LockUp注解等
 		// 8. 如果正常则put到beanDeﬁnitionMap
+	}
+
+	@Test
+	public void testMybatisScanV2() {
+		// 模拟Mybatis集成Spring扫描
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BatisConfigV2.class);
+		TMapper tMapper = context.getBean(TMapper.class);
+		tMapper.queryList();
+
+		// ConfigurationClassPostProcessor#processConfigBeanDefinitions
+		// ConfigurationClassBeanDefinitionReader#loadBeanDefinitions 回调自定义ImportBeanDefinitionRegistrar
+		// ClassPathBeanDefinitionScanner 扫描器自定义IncludeFilter，重写isCandidateComponent有效Bean判断
 	}
 }
